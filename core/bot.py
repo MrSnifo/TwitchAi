@@ -2,9 +2,9 @@ from twitch.ext.oauth import DeviceAuthFlow, Scopes
 from twitch.errors import Forbidden
 from twitch.user import Broadcaster
 from twitch.types import eventsub
-from twitch.ext.bot import Bot
+from twitch import Client
 
-class Twitch(Bot):
+class Twitch(Client):
     def __init__(self, client_id: str):
         super().__init__(client_id)
 
