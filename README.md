@@ -9,10 +9,10 @@ TwitchAi is an AI-powered Twitch bot that responds to events like follows, subsc
 
 ### Examples
 
-**Follow Example**  
+**Events Example**  
 ![Example](preview_1.gif)
 
-**Subscription Example**  
+**!ask Command**  
 ![Example](preview_2.gif)
 
 ### Setup
