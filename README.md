@@ -16,7 +16,6 @@ TwitchAi is an AI-powered Twitch bot that responds to events like follows, subsc
 ![Example](static/preview_2.gif)
 
 ### Setup
-
 1. Clone the repo:
 
     ```bash
