@@ -20,7 +20,7 @@ TwitchAi is an AI-powered Twitch bot that responds to events like follows, subsc
 1. Clone the repo:
 
     ```bash
-    git clone https://github.com/yourusername/TwitchAi.git
+    git clone https://github.com/mrsnifo/TwitchAi.git
     cd TwitchAi
     ```
 
