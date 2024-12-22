@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 def main():
     config = dotenv_values('.env')
-    bot = TwitchBot(client_id=config['CLIENT_ID'], ai_model=config['AI_MODEL'])
+    bot = TwitchBot(client_id=config['CLIENT_ID'], ai_model=config['AI_MODEL'], cli=False)
 
     try:
         _logger.info("Starting the Twitch bot...")
