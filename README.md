@@ -7,6 +7,8 @@ TwitchAi is an AI-powered Twitch bot that responds to events like follows, subsc
 - **AI-Powered**: Generates witty chat messages.
 - **Customizable**: Set up with your Twitch client ID and AI model.
 
+### Examples
+
 **Events Example**  
 ![Example](static/preview_1.gif)
 
