@@ -1,20 +1,26 @@
-from asyncio import SelectorEventLoop, set_event_loop
 from dotenv import dotenv_values
-from core import Twitch
+from twitch import setup_logging
+from core import TwitchBot
+import asyncio
+import logging
 
+setup_logging(level=logging.INFO)
+_logger = logging.getLogger(__name__)
 
+def main():
+    config = dotenv_values('.env')
+    bot = TwitchBot(client_id=config['CLIENT_ID'], ai_model=config['AI_MODEL'])
+
+    try:
+        _logger.info("Starting the Twitch bot...")
+        asyncio.run(bot.run_bot())
+    except KeyboardInterrupt:
+        _logger.info("Bot interrupted by user. Shutting down...")
+    except Exception as e:
+        _logger.error(f"An error occurred: {e}")
+    finally:
+        _logger.info("Bot has stopped.")
 
 
 if __name__ == '__main__':
-    config = dotenv_values('.env')
-    bot = Twitch(config['CLIENT_ID'], config["AI_MODEL"])
-
-    loop = SelectorEventLoop()
-    set_event_loop(loop)
-
-    try:
-        loop.run_until_complete(bot.run_bot())
-    except KeyboardInterrupt:
-        pass
-    finally:
-        loop.close()
+    main()
