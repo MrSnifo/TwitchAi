@@ -37,13 +37,13 @@ __all__ = ("TwitchBot",)
 
 
 class TwitchBot(Client):
-    def __init__(self, client_id: str, ai_model: str, cli: bool = False):
+    def __init__(self, client_id: str, ai_model: str, cli: bool = False) -> None:
         super().__init__(client_id, cli=cli)
         # Set Up AI.
-        self.ai = AI(model=ai_model)
+        self.ai: AI = AI(model=ai_model)
 
         # Set up OAuth authentication flow.
-        self.auth_flow = DeviceAuthFlow(
+        self.auth_flow: DeviceAuthFlow = DeviceAuthFlow(
             self,
             scopes=[
                 Scopes.USER_READ_CHAT,
@@ -60,7 +60,7 @@ class TwitchBot(Client):
             wrap_run=False
         )
 
-    async def send_message(self, content: str):
+    async def send_message(self, content: str) -> None:
         """
         Send a message to the Twitch channel chat.
         """
@@ -69,13 +69,13 @@ class TwitchBot(Client):
         except Exception as e:
             _logger.error(f"Failed to send message: {e}")
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         """
         Called when the bot is successfully connected and ready.
         """
         _logger.info("Bot is ready to be used.")
 
-    async def on_chat_message(self, data: eventsub.chat.MessageEvent):
+    async def on_chat_message(self, data: eventsub.chat.MessageEvent) -> None:
         """
         Respond to chat messages, specifically those starting with "!ask".
         """
@@ -85,28 +85,28 @@ class TwitchBot(Client):
             response = await self.ai.invoker(query)
             await self.send_message(response.content)
 
-    async def on_chat_clear(self, data: eventsub.chat.ChatClearEvent):
+    async def on_chat_clear(self, data: eventsub.chat.ChatClearEvent) -> None:
         """
         Handle chat clear events by generating a random joke or message.
         """
         response = await self.ai.invoker("Someone has cleared the chat. Make a joke or do something random.")
         await self.send_message(response.content)
 
-    async def on_shared_chat_begin(self, data: eventsub.chat.SharedChatBeginEvent):
+    async def on_shared_chat_begin(self, data: eventsub.chat.SharedChatBeginEvent) -> None:
         """
         Handle shared chat beginning by notifying about the shared chat.
         """
         response = await self.ai.invoker(f"The chat is now shared with {data['broadcaster_user_name']}.")
         await self.send_message(response.content)
 
-    async def on_shared_chat_end(self, data: eventsub.chat.SharedChatEndEvent):
+    async def on_shared_chat_end(self, data: eventsub.chat.SharedChatEndEvent) -> None:
         """
         Handle shared chat ending by notifying about the shared chat ending.
         """
         response = await self.ai.invoker(f"The chat is no longer shared with {data['broadcaster_user_name']}.")
         await self.send_message(response.content)
 
-    async def on_cheer(self, data: eventsub.bits.CheerEvent):
+    async def on_cheer(self, data: eventsub.bits.CheerEvent) -> None:
         """
         Handle cheer events and notify about bits cheer.
         """
@@ -114,28 +114,28 @@ class TwitchBot(Client):
         response = await self.ai.invoker(f"{user} has cheered {data['bits']} bits!")
         await self.send_message(response.content)
 
-    async def on_follow(self, data: eventsub.channels.FollowEvent):
+    async def on_follow(self, data: eventsub.channels.FollowEvent) -> None:
         """
         Handle follow events and notify about new followers.
         """
         response = await self.ai.invoker(f"{data['user_name']} has followed the channel!")
         await self.send_message(response.content)
 
-    async def on_subscribe(self, data: eventsub.channels.SubscribeEvent):
+    async def on_subscribe(self, data: eventsub.channels.SubscribeEvent) -> None:
         """
         Handle subscription events and notify about new subscriptions.
         """
         response = await self.ai.invoker(f"{data['user_name']} has subscribed to the channel!")
         await self.send_message(response.content)
 
-    async def on_subscription_end(self, data: eventsub.channels.SubscriptionEndEvent):
+    async def on_subscription_end(self, data: eventsub.channels.SubscriptionEndEvent) -> None:
         """
         Handle subscription expiration events and notify when a subscription ends.
         """
         response = await self.ai.invoker(f"{data['user_name']}'s subscription has expired.")
         await self.send_message(response.content)
 
-    async def on_subscription_gift(self, data: eventsub.channels.SubscriptionGiftEvent):
+    async def on_subscription_gift(self, data: eventsub.channels.SubscriptionGiftEvent) -> None:
         """
         Handle subscription gift events and notify about gifted subscriptions.
         """
@@ -143,56 +143,56 @@ class TwitchBot(Client):
         response = await self.ai.invoker(f"{user} gifted {data['total']} subs at tier {data['tier']}!")
         await self.send_message(response.content)
 
-    async def on_subscription_message(self, data: eventsub.channels.SubscriptionMessageEvent):
+    async def on_subscription_message(self, data: eventsub.channels.SubscriptionMessageEvent) -> None:
         """
         Handle subscription message events and notify about subscription messages.
         """
         response = await self.ai.invoker(f"{data['user_name']} resubscribed: {data['message']}")
         await self.send_message(response.content)
 
-    async def on_poll_begin(self, data: eventsub.interaction.PollBeginEvent):
+    async def on_poll_begin(self, data: eventsub.interaction.PollBeginEvent) -> None:
         """
         Handle poll start events and notify about the beginning of a poll.
         """
         response = await self.ai.invoker(f"A poll has started: {data['title']}")
         await self.send_message(response.content)
 
-    async def on_poll_end(self, data: eventsub.interaction.PollEndEvent):
+    async def on_poll_end(self, data: eventsub.interaction.PollEndEvent) -> None:
         """
         Handle poll end events and notify about the conclusion of a poll.
         """
         response = await self.ai.invoker(f"The poll has ended: {data['title']}")
         await self.send_message(response.content)
 
-    async def on_prediction_begin(self, data: eventsub.interaction.PredictionBeginEvent):
+    async def on_prediction_begin(self, data: eventsub.interaction.PredictionBeginEvent) -> None:
         """
         Handle prediction start events and notify about the beginning of a prediction.
         """
         response = await self.ai.invoker(f"A prediction has started: {data['title']}")
         await self.send_message(response.content)
 
-    async def on_prediction_end(self, data: eventsub.interaction.PredictionEndEvent):
+    async def on_prediction_end(self, data: eventsub.interaction.PredictionEndEvent) -> None:
         """
         Handle prediction end events and notify about the conclusion of a prediction.
         """
         response = await self.ai.invoker(f"The prediction has ended: {data['title']}")
         await self.send_message(response.content)
 
-    async def on_hype_train_begin(self, data: eventsub.interaction.HypeTrainEvent):
+    async def on_hype_train_begin(self, data: eventsub.interaction.HypeTrainEvent) -> None:
         """
         Handle hype train start events and notify about the start of a hype train.
         """
         response = await self.ai.invoker("The hype train has started!")
         await self.send_message(response.content)
 
-    async def on_hype_train_end(self, data: eventsub.interaction.HypeTrainEndEvent):
+    async def on_hype_train_end(self, data: eventsub.interaction.HypeTrainEndEvent) -> None:
         """
         Handle hype train end events and notify about the end of a hype train.
         """
         response = await self.ai.invoker("The hype train has ended.")
         await self.send_message(response.content)
 
-    async def on_raid(self, data: eventsub.streams.RaidEvent):
+    async def on_raid(self, data: eventsub.streams.RaidEvent) -> None:
         """
         Handle raid events and notify about incoming raids.
         """
@@ -200,7 +200,7 @@ class TwitchBot(Client):
                                          f" {data['viewers']} viewers!")
         await self.send_message(response.content)
 
-    async def run_bot(self):
+    async def run_bot(self) -> None:
         """
         Start the Twitch bot, authenticate, and begin listening for events.
         """

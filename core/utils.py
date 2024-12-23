@@ -25,12 +25,22 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 from langchain_ollama import ChatOllama
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from langchain_ollama.chat_models import BaseMessage
+
+import logging
+_logger = logging.getLogger(__name__)
+
 
 __all__ = ('AI',)
 
 class AI:
-    def __init__(self, model: str):
-        self.model = ChatOllama(model=model)
+    __slots__ = ('model', 'system')
+
+    def __init__(self, model: str) -> None:
+        self.model: ChatOllama = ChatOllama(model=model)
         self.system: str = (
             'You are a Twitch bot that responds to specific events with engaging, concise, and fun messages. '
             'When given an input message, rephrase or enhance it with random variations while keeping the meaning intact. '
@@ -39,9 +49,10 @@ class AI:
             'Do not discuss the bot, its limitations, or how it works.'
         )
 
-    async def invoker(self, message):
+    async def invoker(self, message) -> BaseMessage:
         messages = [
             ('system', self.system),
             ('human', message),
         ]
+        _logger.debug('Invoked message: %s', message)
         return await self.model.ainvoke(messages)
